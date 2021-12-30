@@ -2,6 +2,8 @@ import functools
 from typing import List, Iterable, Callable, Any, Union, Tuple, Optional
 from array import array
 from functools import reduce
+import collections
+import itertools
 
 Predicate = Callable[[Any], bool]
 
@@ -44,6 +46,28 @@ def count_if(pred: Predicate, *iterables) -> int:
     return counter
 
 
+def take(count: int, it: Union[Iterable, range]) -> Iterable:
+    """Take count of elements and skip the rest"""
+    try:
+        if isinstance(it, range):
+            it = iter(it)
+        yield from (next(it) for _ in range(count))
+    except StopIteration:
+        pass
+
+
+def skip(count: int, it: Union[Iterable, range]) -> Iterable:
+    """Skip count # of elements and yield the rest"""
+    try:
+        if isinstance(it, range):
+            it = iter(it)
+        for _ in range(count):
+            _ = next(it)
+        yield from it
+    except StopIteration:
+        pass
+
+
 def map_into(fun: Callable, lst: Union[Tuple, array]):
     """map_into(fun,lst).   Same as map except modifies list in place
 
@@ -67,26 +91,6 @@ def map_into(fun: Callable, lst: Union[Tuple, array]):
     return lst
 
 
-def partition(fun: Predicate, iterable: Iterable[Any]) -> Tuple[List[Any], List[Any]]:
-    """partition( fun, iterable ).  Partition iterable into two sublists (a,b) where
-    items in a are when f returns a True value
-    items in b are when f returns a non-True value
-
-    :param fun: function used to determine where to partition
-    :param iterable: iterable
-    :returns: tuple ( a, b ) where a is all items satisifying pred fun and b
-    where they don't
-    """
-    passed = []
-    failed = []
-    for i in iterable:
-        if fun(i):
-            passed.append(i)
-        else:
-            failed.append(i)
-    return passed, failed
-
-
 def remove_if(pred: Predicate, lst: List):
     """remove_if(pred, lst).  Modify the list to remove all items where pred returns a true value
 
@@ -98,10 +102,10 @@ def remove_if(pred: Predicate, lst: List):
         del lst[i]
 
 
-def unique(iterable: Iterable, hash_fn: Optional[Callable[[Any], Any]] = None) -> Iterable:
+def unique(it: Iterable, hash_fn: Optional[Callable[[Any], Any]] = None) -> Iterable:
     """Iterates over an iterable and only yields unique items
 
-    :param iterable: iterable
+    :param it: iterable
     :param hash_fn: Hash function to use,
 
     :returns: generator that returns unique items for an iterable
@@ -115,22 +119,22 @@ def unique(iterable: Iterable, hash_fn: Optional[Callable[[Any], Any]] = None) -
         return hash_fn(element), element
 
     # iterate and hash each value and add each to set
-    for hash_value, item in map(do_hash, iterable):
+    for hash_value, item in map(do_hash, it):
         if hash_value not in visited:
             visited.add(hash_value)
             yield item
 
 
-def nth(n: int, arg: Optional[Iterable] = None) -> Tuple[Callable, Any]:
+def nth(n: int, it: Optional[Iterable] = None) -> Tuple[Callable, Any]:
     """Nth function (as in lisp, Occasionally useful, when supplied as a first class function
 
     :param n: index get an element for
-    :param arg: iterable - if not supplied return the partial application
+    :param it: iterable - if not supplied return the partial application
     :return: Element or partial application
     """
-    if arg is None:
+    if it is None:
         return functools.partial(nth, n)
-    return arg[n]
+    return it[n]
 
 
 first, second, third, fourth, fifth = map(nth, range(5))

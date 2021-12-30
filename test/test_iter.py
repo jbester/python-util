@@ -24,13 +24,11 @@ class IterToolsCase(unittest.TestCase):
         # verify array
         self.assertEqual(b, c)
 
-    def test_partition(self):
-        # create an array 0 .. 9
-        b = array('b', range(10))
-        # split into even and odd partitions
-        passed, fail = partition(lambda x: x % 2 == 0, b)
-        self.assertTrue(all(map(lambda x: x % 2 == 0, passed)))
-        self.assertFalse(any(map(lambda x: x % 2 == 0, fail)))
+    def test_take(self):
+        self.assertEqual(list(range(5)), list(take(5, range(10))))
+
+    def test_skip(self):
+        self.assertEqual(list(range(5, 10)), list(skip(5, range(10))))
 
     def test_nth(self):
         # verify nth pulls the nth element out

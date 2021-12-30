@@ -2,9 +2,9 @@ import time
 from typing import AnyStr
 import logging
 from .shellutils import die, warn, in_directory, directory_removed_after, file_removed_after, chomp
-from .iterutil import count_if, first, nth, map_into, partition, remove_if, unique, unzip, reduce, \
-    second, third, fourth, fifth
-from .fnutil import identity, compose
+from .iterutil import count_if, first, nth, map_into, remove_if, unique, unzip, reduce, \
+    second, third, fourth, fifth, skip, take
+from .fnutil import identity, compose, PARAM, cut
 from .symbols import Symbol
 from typing import Optional, Callable
 import contextlib
