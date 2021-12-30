@@ -1,5 +1,5 @@
 from typing import Any, Callable
-from .symbols import Symbol
+from .symbols import symbol
 
 
 def compose(outer_fun: Callable, inner_fun: Callable):
@@ -42,7 +42,7 @@ def identity(*args):
     return args
 
 
-PARAM = Symbol('PARAM')
+PARAM = symbol('PARAM')
 
 
 def cut(func, *args, **keywords):

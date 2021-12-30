@@ -5,7 +5,7 @@ from .shellutils import die, warn, in_directory, directory_removed_after, file_r
 from .iterutil import count_if, first, nth, map_into, remove_if, unique, unzip, reduce, \
     second, third, fourth, fifth, skip, take
 from .fnutil import identity, compose, PARAM, cut
-from .symbols import Symbol
+from .symbols import symbol
 from typing import Optional, Callable
 import contextlib
 

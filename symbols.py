@@ -2,6 +2,6 @@ from dataclasses import dataclass
 
 
 @dataclass(frozen=True, eq=True)
-class Symbol:
+class symbol:
     """Unmodifiable comparable Symbol"""
-    symbol_id: str
+    identifier: str

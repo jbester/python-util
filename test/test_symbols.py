@@ -1,12 +1,12 @@
 import unittest
-from .. import Symbol
+from .. import symbol
 
 
 class SymbolsTest(unittest.TestCase):
     def test_symbol(self):
-        hello = Symbol('hello')
-        bye = Symbol('bye')
-        hello2 = Symbol('hello')
+        hello = symbol('hello')
+        bye = symbol('bye')
+        hello2 = symbol('hello')
         self.assertEqual(hello, hello2)
         self.assertNotEqual(bye, hello)
         self.assertNotEqual(bye, hello2)
