@@ -134,7 +134,11 @@ def nth(n: int, it: Optional[Iterable] = None) -> Tuple[Callable, Any]:
     """
     if it is None:
         return functools.partial(nth, n)
-    return it[n]
+    if isinstance(it, range):
+        it = iter(it)
+    for _ in range(n):
+        _ = next(it)
+    return next(it)
 
 
 first, second, third, fourth, fifth = map(nth, range(5))
