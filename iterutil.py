@@ -102,26 +102,26 @@ def remove_if(pred: Predicate, lst: List):
         del lst[i]
 
 
-def unique(it: Iterable, hash_fn: Optional[Callable[[Any], Any]] = None) -> Iterable:
+def unique(it: Iterable, key_fn: Optional[Callable[[Any], Any]] = None) -> Iterable:
     """Iterates over an iterable and only yields unique items
 
     :param it: iterable
-    :param hash_fn: Hash function to use,
+    :param key_fn: Function to extract unique components of the item
 
     :returns: generator that returns unique items for an iterable
     """
     visited = set()
 
-    def do_hash(element):
-        # use ident if no hash function provided
-        if hash_fn is None:
+    def get_key(element):
+        # use value if no function provided
+        if key_fn is None:
             return element, element
-        return hash_fn(element), element
+        return key_fn(element), element
 
     # iterate and hash each value and add each to set
-    for hash_value, item in map(do_hash, it):
-        if hash_value not in visited:
-            visited.add(hash_value)
+    for key_value, item in map(get_key, it):
+        if key_value not in visited:
+            visited.add(key_value)
             yield item
 
 
