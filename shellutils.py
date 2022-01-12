@@ -4,7 +4,7 @@ import sys
 import traceback
 from pathlib import Path
 import shutil
-from typing import Union, AnyStr
+from typing import Union, AnyStr, List
 
 
 def die(*msg, file=sys.stderr, error_code=1):
@@ -45,7 +45,7 @@ def fatal_assert(condition, *msg):
 
 
 @contextlib.contextmanager
-def in_directory(path: Union[str, Path]):
+def in_directory(path: os.PathLike):
     """With support for something like a pushd/popd pair.  Change to a directory for a block and then change back.
 Raises NotADirectoryError if path does not exist
 
@@ -62,7 +62,7 @@ Raises NotADirectoryError if path does not exist
 
 
 @contextlib.contextmanager
-def directory_removed_after(path: Union[str, Path], ignore_errors: bool = False):
+def directory_removed_after(path: os.PathLike, ignore_errors: bool = False):
     """With support that removes the specified path after the block
 
     :param path: directory path
@@ -76,7 +76,7 @@ def directory_removed_after(path: Union[str, Path], ignore_errors: bool = False)
 
 
 @contextlib.contextmanager
-def file_removed_after(path: Union[str, Path]):
+def file_removed_after(path: os.PathLike):
     """With support that removes the specified path after the block
 
     :param path: directory path
@@ -86,6 +86,20 @@ def file_removed_after(path: Union[str, Path]):
     finally:
         if os.path.exists(path):
             os.unlink(path)
+
+
+@contextlib.contextmanager
+def files_removed_after(paths: List[os.PathLike]):
+    """With support that removes the specified path after the block
+
+    :param paths: list of directory paths
+    """
+    try:
+        yield
+    finally:
+        for path in paths:
+            if os.path.exists(path):
+                os.unlink(path)
 
 
 def chomp(s: AnyStr) -> AnyStr:
