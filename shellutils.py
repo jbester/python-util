@@ -37,6 +37,13 @@ def warn(*msg, file=sys.stderr):
     print(*msg, suffix, file=file)
 
 
+
+def fatal_assert(condition, *msg):
+    """Assert using die instead of an exception"""
+    if not condition:
+        die(*msg)
+
+
 @contextlib.contextmanager
 def in_directory(path: Union[str, Path]):
     """With support for something like a pushd/popd pair.  Change to a directory for a block and then change back.
